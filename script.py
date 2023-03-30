@@ -36,7 +36,33 @@ def print_artisan_report():
             price = material_prices[ingredient] // 10 if ingredient in common_materials else material_prices[ingredient]
             artisan_cost += amount * price
         print(f'{material_names[material]:24}{material_prices[material]:12}g{artisan_cost:11}g')
-   
+
+def print_advanced_artisan_report():
+    def print_strategy(material, amount):
+        if material in artisan_recipies:
+            artisan_price = 0
+            for ingredients in artisan_recipies[material]:
+                _amount, _ingredient = ingredients
+                artisan_price += _amount * (material_prices[_ingredient] // 10 if _ingredient in common_materials else material_prices[_ingredient])
+            if artisan_price < material_prices[material]:
+                price = amount * artisan_price
+                source = 'from artisan'
+            else:
+                price = amount * material_prices[material]
+                source = 'from vendor'
+        else:
+            source = 'from vendor'
+            price = amount * (material_prices[material] // 10 if material in common_materials else material_prices[material])     
+        print(f'{amount:3d} {material_names[material]:24}{price}g {source}')
+        if source == 'from artisan':
+            for ingredients in artisan_recipies[material]:
+                _amount, _ingredient = ingredients
+                print('using...')
+                print_strategy(_ingredient, _amount)
+    amount = 1
+    for material in material_names.keys():
+        print_strategy(material, amount)
+    
     
 args = sys.argv
 del args[0] # delete name of script
@@ -121,4 +147,5 @@ artisan_recipies = {
     939: [(5, 929), (20, 0)],
     944: [(4, 934), (1, 939), (20, 0)],
 }
-print_artisan_report()    
+print_advanced_artisan_report()
+print_artisan_report()  
