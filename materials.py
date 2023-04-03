@@ -147,6 +147,9 @@ def print_material_report():
                 amount, matid = ingredient
                 strategy = materials[matid].get_buying_strategy(materials)
                 print(f'__>{amount:3d}'
-                      f'{strategy["name"]:24}'
+                      f' {strategy["name"]:24}'
                       f'{strategy["price"]:5,d}'
                       f'g from {strategy["source"]}')
+
+if __name__ == '__main__':
+    print_material_report()
